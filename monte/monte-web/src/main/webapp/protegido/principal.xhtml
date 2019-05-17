@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+        <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"/> 
+        <!-- lo de arriba deberia ir en un archivo de plantilla,para que sea comun a varias paginas luego que necesite contro -->
+    </h:head>
+    <h:body>
+        Logueado
+    </h:body>
+</html>
+

@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Registro Cliente</title>
+        <h:outputScript library="js" name="spanishLocale.js" />
+        <style type="text/css">
+            .ui-panelgrid .ui-grid-responsive .ui-panelgrid-cell {
+                text-align: left;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:growl id="mensaje" severity="info, fatal" showSummary="false" showDetail="true"/>
+            
+            <h3>Ingrese sus datos personales</h3>
+                <p:panelGrid id="pgRegistros" columns="3" layout="grid">
+                    <p:outputLabel for="txtNombre" value="Nombre" />
+                    <p:inputText id="txtNombre" value="#{RegistroController.cliente.nombre}" required="true"/>    
+                    <p:message for="txtNombre"/>    
+                    
+                    <p:outputLabel for="txtApellido" value="Apellido" />
+                    <p:inputText id="txtApellido" value="#{RegistroController.cliente.apellido}" required="true"/>   
+                    <p:message for="txtApellido"/>   
+                    
+                    <p:outputLabel for="txtEmail" value="Email" />
+                    <p:inputText id="txtEmail" value="#{RegistroController.cliente.email}" required="true">
+                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    </p:inputText>
+                    <p:message for="txtEmail"/>   
+                    
+                    <p:outputLabel for="c1" value="Password" />
+                    <p:password id="c1" value="#{RegistroController.cliente.password}" match="c2" promptLabel="Ingrese una clave" required="true">
+                        <f:validateLength minimum = "5" maximum = "8" />
+                    </p:password>
+                    <p:message for="c1"/>   
+                    
+                    <p:outputLabel for="c2" value="Confirmar password" />
+                    <p:password id="c2" required="true"/>
+                    <p:message for="c2"/> 
+
+                    <p:commandButton icon="ui-icon-check" value="Registro" update="pgRegistros, mensaje" actionListener="#{RegistroController.registrar()}"/>
+
+                </p:panelGrid>
+            <p:separator/>
+            <p:link value="Volver a la pagina de login" outcome="login" />
+            
+        </h:form>
+    </h:body>
+</html>
+

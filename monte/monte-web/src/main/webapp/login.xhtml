@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Login</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"></link>
+        <meta name="google-signin-client_id" content="41773803941-p9l0sms3ggnmto9rj2qphfcukfufj4bo.apps.googleusercontent.com"/>
+        <script src="https://apis.google.com/js/platform.js" async="async" defer="defer"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+       
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:growl showDetail="true"/>
+            <h:panelGrid columns="2">
+            <p:outputLabel for="txtEmail" value="Email"/>
+            <p:inputText id="txtEmail" value="#{LoginController.cliente.email}" required="true" />
+            
+            <p:outputLabel for="txtPassword" value="Password"/>
+            <p:inputText id="txtPassword" value="#{LoginController.cliente.password}" required="true" />
+            
+            <h:column />
+            <p:commandButton icon="ui-icon-key" value="Iniciar sesion" styleClass="ui-priority-primary"  action="#{LoginController.iniciarSesion()}"/>
+           
+            
+            </h:panelGrid>
+            
+            
+            <p:link value="Crea una cuenta" outcome="registro" />
+            
+        </h:form>
+        <p:separator />
+        <h:form id="goid">
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            <p:inputText style="display: none" widgetVar="wve" value="#{LoginController.cliente.email}" />
+            <h:commandButton style="display: none" id="clickButton" action="#{LoginController.iniciarSesionGoogle()}"/>
+            
+            
+        </h:form>
+        
+        <script>
+            function onSignIn(googleUser) {
+                var profile = googleUser.getBasicProfile();
+                var id_token = googleUser.getAuthResponse().id_token;
+                console.log('Id token : ' + id_token);
+                console.log('Id : ' + profile.getId());
+                console.log('Name: ' + profile.getName());
+                console.log('Image URL: ' + profile.getImageUrl());
+                console.log('Email: ' + profile.getEmail());
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'http://localhost:8080/monte-web/api/hola/sesionGoogle');
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            //    xhr.onload = function() {
+            //      console.log('Signed in as: ' + xhr.responseText);
+            //    };
+                xhr.send("email=" + profile.getEmail());
+
+
+
+                PF('wve').jq.val(profile.getEmail());
+
+               /* window.onload = function(){
+                    var button = document.getElementById('clickButton');
+                    button.form.submit();
+                    alert("Lo hice wii");
+                };*/
+
+
+
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                  console.log('User signed out.');
+              });  
+              fnc();
+                //window.location.replace("http://localhost:8080/monte-web/faces/protegido/report.xhtml");
+
+            }
+
+            function fnc()
+            {
+                $("#goid\\:clickButton").click();
+            }
+        </script>
+    </h:body>
+</html>
+
