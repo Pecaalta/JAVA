@@ -30,4 +30,14 @@ public interface UserFacadeLocal {
 
     int count();
     
+    User iniciarSesion(User c);
+
+    User findClienteByEmail(String email);
+
+    User iniciarSesionRedes(String email);
+    
+    User usuarioDeGoogle();
+    
+    void usuarioDeGoogleCambiarEstado(User c);
+    
 }
