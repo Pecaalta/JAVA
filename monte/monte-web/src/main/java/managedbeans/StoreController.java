@@ -5,16 +5,13 @@
  */
 package managedbeans;
 
-import EJB.ClienteFacadeLocal;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -24,7 +21,7 @@ import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.chart.*;
 
 @Named(value = "StoreController")
-@SessionScoped
+@ViewScoped
 public class StoreController implements Serializable {
     /* Grafica de Barras */
     private BarChartModel barModel;

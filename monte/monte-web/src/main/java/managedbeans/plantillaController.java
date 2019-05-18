@@ -21,7 +21,7 @@ import org.primefaces.model.chart.BarChartModel;
  * @author Lucas
  */
 @Named(value = "plantillaController")
-@SessionScoped
+@ViewScoped
 public class plantillaController implements Serializable{
     
     /**

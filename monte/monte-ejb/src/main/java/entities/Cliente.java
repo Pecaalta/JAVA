@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -43,6 +44,8 @@ public class Cliente implements Serializable {
     private String password;
     @Temporal(TemporalType.DATE)
     private Date fecNac;
+    
+    
 
     public Long getId() {
         return id;

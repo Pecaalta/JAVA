@@ -3,26 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package managedbeans;
+//package managedbeans;
 
-import EJB.MessageManagerLocal;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.faces.bean.ViewScoped;
-import javax.faces.event.ActionEvent;
-import javax.inject.Named;
-//import org.primefaces.context.RequestContext;
-import entities.Cliente;
-import entities.Message;
+//import EJB.MessageManagerLocal;
+//import java.io.Serializable;
+//import java.util.Collections;
+//import java.util.Date;
+//import java.util.LinkedList;
+//import java.util.List;
+//import javax.ejb.EJB;
+//import javax.faces.bean.ViewScoped;
+//import javax.faces.event.ActionEvent;
+//import javax.inject.Named;
+////import org.primefaces.context.RequestContext;
+//import entities.Cliente;
+//import entities.Message;
 
- 
-@Named(value = "MessageController")
-@ViewScoped
-public class MessageController implements Serializable {
+// 
+//@Named(value = "MessageController")
+//@ViewScoped
+//public class MessageController implements Serializable {
 
     /**
      * Creates a new instance of LoginController
@@ -82,4 +82,4 @@ public class MessageController implements Serializable {
 //    }
  
     
-}
+//}
