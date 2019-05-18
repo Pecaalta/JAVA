@@ -10,7 +10,6 @@
         <meta name="google-signin-client_id" content="41773803941-p9l0sms3ggnmto9rj2qphfcukfufj4bo.apps.googleusercontent.com"/>
         <script src="https://apis.google.com/js/platform.js" async="async" defer="defer"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-        <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
        
     </h:head>
     <h:body>
@@ -18,7 +17,18 @@
             <p:growl showDetail="true"/>
             <h:panelGrid columns="2">
             <p:outputLabel for="txtEmail" value="Email"/>
+<<<<<<< HEAD
          
+=======
+            <p:inputText id="txtEmail" value="#{UsuarioController.cliente.email}" required="true" />
+            
+            <p:outputLabel for="txtPassword" value="Password"/>
+            <p:inputText id="txtPassword" value="#{UsuarioController.cliente.password}" required="true" />
+            
+            <h:column />
+            <p:commandButton icon="ui-icon-key" value="Iniciar sesion" styleClass="ui-priority-primary"  action="#{UsuarioController.iniciarSesion()}"/>
+           
+>>>>>>> a2bf89c4752f9cb1d08011b6044dcc45e7ce64b8
             
             </h:panelGrid>
             
@@ -29,6 +39,11 @@
         <p:separator />
         <h:form id="goid">
             <div class="g-signin2" data-onsuccess="onSignIn"></div>
+<<<<<<< HEAD
+=======
+            <p:inputText style="display: none" widgetVar="wve" value="#{UsuarioController.cliente.email}" />
+            <h:commandButton style="display: none" id="clickButton" action="#{UsuarioController.iniciarSesionGoogle()}"/>
+>>>>>>> a2bf89c4752f9cb1d08011b6044dcc45e7ce64b8
             
             
         </h:form>
