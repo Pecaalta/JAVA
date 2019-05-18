@@ -5,7 +5,7 @@
  */
 package utilidades;
 
-import entities.Cliente;
+import entities.User;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +31,7 @@ import javax.mail.internet.MimeMessage;
 public class Correo {
     
     
-     public static void verificacionCorreoCliente(Cliente c){
+     public static void verificacionCorreoCliente(User c){
         try {
             Properties prop = new Properties();
             prop.setProperty("mail.smtp.host", "smtp.gmail.com");

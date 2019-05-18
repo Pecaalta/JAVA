@@ -1,7 +1,7 @@
 package managedbeans;
 
-import EJB.ClienteFacadeLocal;
-import entities.Cliente;
+import EJB.UserFacadeLocal;
+import entities.User;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Properties;
@@ -29,8 +29,8 @@ public class UsuarioBean implements Serializable {
 	private static final long serialVersionUID = 3658300628580536494L;
 
         @EJB
-        private ClienteFacadeLocal clienteEJB;
-        private Cliente cliente;
+        private UserFacadeLocal clienteEJB;
+        private User user;
 
 	
 	private SocialAuthManager socialManager;
@@ -43,7 +43,7 @@ public class UsuarioBean implements Serializable {
 
         @PostConstruct
         public void init() {
-            cliente = new Cliente();
+            user = new User();
         }
 
 	public void conectar() {
@@ -83,8 +83,8 @@ public class UsuarioBean implements Serializable {
         public String iniciarSesion(){
             String redireccion = null;
             try {
-                Cliente cl;
-                cl = clienteEJB.iniciarSesion(cliente);
+                User cl;
+                cl = clienteEJB.iniciarSesion(user);
                 if(cl != null){
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", cl);
                     redireccion = "/protegido/report?faces-redirect=true";
@@ -101,8 +101,8 @@ public class UsuarioBean implements Serializable {
         public String iniciarSesionGoogle(){
             String redireccion = null;
             try {
-                Cliente cl;
-                cl = clienteEJB.findClienteByEmail(cliente.getEmail());
+                User cl;
+                cl = clienteEJB.findClienteByEmail(user.getEmail());
                 if(cl != null){
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", cl);
                     redireccion = "/protegido/report?faces-redirect=true";
@@ -133,14 +133,14 @@ public class UsuarioBean implements Serializable {
          
         public void registrar(){
             try {
-                Cliente prueba = new Cliente();
-                prueba.setApellido(cliente.getApellido());
-                prueba.setNombre(cliente.getNombre());
-                prueba.setEmail(cliente.getEmail());
-                prueba.setPassword(cliente.getPassword());
+                User prueba = new User();
+                prueba.setSurname(user.getSurname());
+                prueba.setName(user.getName());
+                prueba.setEmail(user.getEmail());
+                prueba.setPass(user.getPass());
                 if(clienteEJB.findClienteByEmail(prueba.getEmail()) == null){
-                    cliente.setEmailVerificado(RandomUtilidad.randomString(10));
-                    prueba.setEmailVerificado(cliente.getEmailVerificado());
+                    user.setEmailVerificado(RandomUtilidad.randomString(10));
+                    prueba.setEmailVerificado(user.getEmailVerificado());
                     clienteEJB.create(prueba);
                     Correo.verificacionCorreoCliente(prueba);
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso","Se registro el usuario"));
@@ -153,11 +153,11 @@ public class UsuarioBean implements Serializable {
             }
         }
     
-        public Cliente getCliente() {
-            return cliente;
+        public User getCliente() {
+            return user;
         }
 
-        public void setCliente(Cliente cliente) {
-            this.cliente = cliente;
+        public void setCliente(User cliente) {
+            this.user = cliente;
         }
 }

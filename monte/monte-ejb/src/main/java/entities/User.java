@@ -47,6 +47,7 @@ public class User implements Serializable {
     private String email;
 
     
+    private String EmailVerificado;
     private String pass;
     private String token;
     private short isActive;
