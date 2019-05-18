@@ -18,14 +18,7 @@
             <p:growl showDetail="true"/>
             <h:panelGrid columns="2">
             <p:outputLabel for="txtEmail" value="Email"/>
-            <p:inputText id="txtEmail" value="#{UsuarioBean.cliente.email}" required="true" />
-            
-            <p:outputLabel for="txtPassword" value="Password"/>
-            <p:inputText id="txtPassword" value="#{UsuarioBean.cliente.password}" required="true" />
-            
-            <h:column />
-            <p:commandButton icon="ui-icon-key" value="Iniciar sesion" styleClass="ui-priority-primary"  action="#{UsuarioBean.iniciarSesion()}"/>
-           
+         
             
             </h:panelGrid>
             
@@ -36,8 +29,6 @@
         <p:separator />
         <h:form id="goid">
             <div class="g-signin2" data-onsuccess="onSignIn"></div>
-            <p:inputText style="display: none" widgetVar="wve" value="#{UsuarioBean.cliente.email}" />
-            <h:commandButton style="display: none" id="clickButton" action="#{UsuarioBean.iniciarSesionGoogle()}"/>
             
             
         </h:form>
