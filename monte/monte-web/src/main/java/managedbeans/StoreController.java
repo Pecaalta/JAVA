@@ -5,7 +5,7 @@
  */
 package managedbeans;
 
-import EJB.ClienteFacadeLocal;
+import EJB.UserFacadeLocal;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

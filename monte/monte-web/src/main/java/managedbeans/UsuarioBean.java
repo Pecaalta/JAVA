@@ -1,8 +1,12 @@
 package managedbeans;
 
+import EJB.UserFacadeLocal;
+import entities.User;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Properties;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -16,13 +20,18 @@ import org.brickred.socialauth.Profile;
 import org.brickred.socialauth.SocialAuthConfig;
 import org.brickred.socialauth.SocialAuthManager;
 import org.brickred.socialauth.util.SocialAuthUtil;
+import utilidades.Correo;
+import utilidades.RandomUtilidad;
 
-@Named
+@Named(value = "UsuarioBean")
 @SessionScoped
 public class UsuarioBean implements Serializable {
-
-
 	private static final long serialVersionUID = 3658300628580536494L;
+
+        @EJB
+        private UserFacadeLocal clienteEJB;
+        private User user;
+
 	
 	private SocialAuthManager socialManager;
 	private Profile profile;
@@ -31,6 +40,11 @@ public class UsuarioBean implements Serializable {
 	private final String redirectURL = "http://localhost:8080/monte-web/redirectHome.xhtml";
 	//private final String redirectURL = "http://www.codewebpro.com/blog";
 	private final String provider = "facebook";
+
+        @PostConstruct
+        public void init() {
+            user = new User();
+        }
 
 	public void conectar() {
 		Properties prop = System.getProperties();
@@ -65,6 +79,48 @@ public class UsuarioBean implements Serializable {
                 
 		FacesContext.getCurrentInstance().getExternalContext().redirect(mainURL);
 	}
+    
+        public String iniciarSesion(){
+            String redireccion = null;
+            try {
+                User cl;
+                cl = clienteEJB.iniciarSesion(user);
+                if(cl != null){
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", cl);
+                    redireccion = "/protegido/report?faces-redirect=true";
+                }
+                else{
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso","Cagamos dijo ramos"));
+                }
+            } catch (Exception e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso","Error"));
+            }
+            return redireccion;
+        }
+
+        public String iniciarSesionGoogle(){
+            String redireccion = null;
+            try {
+                User cl;
+                cl = clienteEJB.findClienteByEmail(user.getEmail());
+                if(cl != null){
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", cl);
+                    redireccion = "/protegido/report?faces-redirect=true";
+                }
+                else{
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso","Cagamos dijo ramos"));
+                }
+            } catch (Exception e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso","Error"));
+            }
+            return redireccion;
+        }
+
+        public String cerrarSecion(){
+
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("usuario");
+            return "/?faces-redirect=true";
+        }
 
 	public Profile getProfile() {
 		return profile;
@@ -73,5 +129,35 @@ public class UsuarioBean implements Serializable {
 	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
+        
+         
+        public void registrar(){
+            try {
+                User prueba = new User();
+                prueba.setSurname(user.getSurname());
+                prueba.setName(user.getName());
+                prueba.setEmail(user.getEmail());
+                prueba.setPass(user.getPass());
+                if(clienteEJB.findClienteByEmail(prueba.getEmail()) == null){
+                    user.setEmailVerificado(RandomUtilidad.randomString(10));
+                    prueba.setEmailVerificado(user.getEmailVerificado());
+                    clienteEJB.create(prueba);
+                    Correo.verificacionCorreoCliente(prueba);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso","Se registro el usuario"));
+                }
+                else{
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso","Ya existe un usuario con ese email."));
+                }
+            } catch (Exception e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso","Error"));
+            }
+        }
+    
+        public User getCliente() {
+            return user;
+        }
 
+        public void setCliente(User cliente) {
+            this.user = cliente;
+        }
 }

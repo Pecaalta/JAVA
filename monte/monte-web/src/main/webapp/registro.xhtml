@@ -20,21 +20,21 @@
             <h3>Ingrese sus datos personales</h3>
                 <p:panelGrid id="pgRegistros" columns="3" layout="grid">
                     <p:outputLabel for="txtNombre" value="Nombre" />
-                    <p:inputText id="txtNombre" value="#{RegistroController.cliente.nombre}" required="true"/>    
+                    <p:inputText id="txtNombre" value="#{UsuarioBean.cliente.nombre}" required="true"/>    
                     <p:message for="txtNombre"/>    
                     
                     <p:outputLabel for="txtApellido" value="Apellido" />
-                    <p:inputText id="txtApellido" value="#{RegistroController.cliente.apellido}" required="true"/>   
+                    <p:inputText id="txtApellido" value="#{UsuarioBean.cliente.apellido}" required="true"/>   
                     <p:message for="txtApellido"/>   
                     
                     <p:outputLabel for="txtEmail" value="Email" />
-                    <p:inputText id="txtEmail" value="#{RegistroController.cliente.email}" required="true">
+                    <p:inputText id="txtEmail" value="#{UsuarioBean.cliente.email}" required="true">
                         <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                     </p:inputText>
                     <p:message for="txtEmail"/>   
                     
                     <p:outputLabel for="c1" value="Password" />
-                    <p:password id="c1" value="#{RegistroController.cliente.password}" match="c2" promptLabel="Ingrese una clave" required="true">
+                    <p:password id="c1" value="#{UsuarioBean.cliente.password}" match="c2" promptLabel="Ingrese una clave" required="true">
                         <f:validateLength minimum = "5" maximum = "8" />
                     </p:password>
                     <p:message for="c1"/>   
@@ -43,7 +43,7 @@
                     <p:password id="c2" required="true"/>
                     <p:message for="c2"/> 
 
-                    <p:commandButton icon="ui-icon-check" value="Registro" update="pgRegistros, mensaje" actionListener="#{RegistroController.registrar()}"/>
+                    <p:commandButton icon="ui-icon-check" value="Registro" update="pgRegistros, mensaje" actionListener="#{UsuarioBean.registrar()}"/>
 
                 </p:panelGrid>
             <p:separator/>

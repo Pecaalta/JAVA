@@ -5,8 +5,8 @@
  */
 package managedbeans;
 
-import EJB.ClienteFacadeLocal;
-import entities.Cliente;
+import EJB.UserFacadeLocal;
+import entities.User;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -29,7 +29,7 @@ public class plantillaController implements Serializable{
      */
     
     @EJB
-    private ClienteFacadeLocal clienteEJB;
+    private UserFacadeLocal clienteEJB;
     
     public void verificarSesion(){
         
@@ -43,7 +43,7 @@ public class plantillaController implements Serializable{
         
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            Cliente c = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+            User c = (User) context.getExternalContext().getSessionMap().get("usuario");
             if(c == null){
                context.getExternalContext().redirect("../permisos.xhtml");
             } else {

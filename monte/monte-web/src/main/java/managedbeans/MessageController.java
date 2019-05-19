@@ -5,7 +5,7 @@
  */
 package managedbeans;
 
-import EJB.MessageManagerLocal;
+//import EJB.MessageManagerLocal;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
@@ -16,8 +16,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 //import org.primefaces.context.RequestContext;
-import entities.Cliente;
-import entities.Message;
+import entities.User;
+//import entities.Message;
 
  
 @Named(value = "MessageController")

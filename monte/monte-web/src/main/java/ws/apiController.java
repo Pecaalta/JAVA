@@ -5,7 +5,7 @@
  */
 package ws;
 
-import EJB.ClienteFacadeLocal;
+import EJB.UserFacadeLocal;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -13,7 +13,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import entities.Cliente;
+import entities.User;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
@@ -40,7 +40,7 @@ import javax.ws.rs.core.MultivaluedMap;
 public class apiController extends Application {
     
     @EJB
-    ClienteFacadeLocal cl;
+    UserFacadeLocal cl;
     
 //    private static final HttpTransport transport = new NetHttpTransport();
 //    private static final JsonFactory jsonFactory = new JacksonFactory();
@@ -51,8 +51,8 @@ public class apiController extends Application {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public String registrarAlgo(String milagro){
         String respuesta = "esperemos que esto funcione";
-        Cliente c = new Cliente();
-        c.setNombre(milagro);
+        User c = new User();
+        c.setName(milagro);
         cl.create(c);
         return respuesta;
     }
@@ -118,7 +118,7 @@ public class apiController extends Application {
         String email = parametros.getFirst("email");
         
         if(cl.findClienteByEmail(email) == null){
-            Cliente c = new Cliente();
+            User c = new User();
 //            c.setNombre(nombre);
 //            c.setApellido(apellido);
             c.setEmail(email);
