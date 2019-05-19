@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -37,14 +39,25 @@ public class Producto implements Serializable {
         generator="Producto")
     private Integer id;
     @Lob
-    private String description;
+    private String descripcion;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date published;
-    private String title;
-    private short outstanding;
-    private int available;
+    private Date publicado;
+    private String titulo;
+    private short destacado;
+    private int disponible;
     @ManyToOne (optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Tienda storeId;
+    private Tienda storeIdProducto;
+    @OneToMany(mappedBy = "productoidCompra")
+    private Collection<Compra> compraCol;
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Ubicacion ubicacionidProducto;
+    @OneToMany(mappedBy = "productoidVisita")
+    private Collection<Visita> visitaCol;
+    @OneToMany(mappedBy = "productoidSusc")
+    private Collection<Suscripcion> suscripcionCol;
+    @OneToMany(mappedBy = "productoIdPromocion")
+    private Collection<Promocion> promocionCol;
+    
 
     public Producto() {
     }
@@ -53,17 +66,15 @@ public class Producto implements Serializable {
         this.id = id;
     }
 
-    public Producto(Integer id, String description, Date published, String title, short outstanding, int available) {
+    public Producto(Integer id, String descripcion, Date publicado, String titulo, short destacado, int disponible) {
         this.id = id;
-        this.description = description;
-        this.published = published;
-        this.title = title;
-        this.outstanding = outstanding;
-        this.available = available;
+        this.descripcion = descripcion;
+        this.publicado = publicado;
+        this.titulo = titulo;
+        this.destacado = destacado;
+        this.disponible = disponible;
     }
 
-    
-    
     public Integer getId() {
         return id;
     }
@@ -72,53 +83,95 @@ public class Producto implements Serializable {
         this.id = id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public Date getPublished() {
-        return published;
+    public Date getPublicado() {
+        return publicado;
     }
 
-    public void setPublished(Date published) {
-        this.published = published;
+    public void setPublicado(Date publicado) {
+        this.publicado = publicado;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
-    public short getOutstanding() {
-        return outstanding;
+    public short getDestacado() {
+        return destacado;
     }
 
-    public void setOutstanding(short outstanding) {
-        this.outstanding = outstanding;
+    public void setDestacado(short destacado) {
+        this.destacado = destacado;
     }
 
-    public int getAvailable() {
-        return available;
+    public int getDisponible() {
+        return disponible;
     }
 
-    public void setAvailable(int available) {
-        this.available = available;
+    public void setDisponible(int disponible) {
+        this.disponible = disponible;
     }
 
-    public Tienda getStoreId() {
-        return storeId;
+    public Tienda getStoreIdProducto() {
+        return storeIdProducto;
     }
 
-    public void setStoreId(Tienda storeId) {
-        this.storeId = storeId;
+    public void setStoreIdProducto(Tienda storeIdProducto) {
+        this.storeIdProducto = storeIdProducto;
     }
+
+    public Collection<Compra> getCompraCol() {
+        return compraCol;
+    }
+
+    public void setCompraCol(Collection<Compra> compraCol) {
+        this.compraCol = compraCol;
+    }
+
+    public Ubicacion getUbicacionidProducto() {
+        return ubicacionidProducto;
+    }
+
+    public void setUbicacionidProducto(Ubicacion ubicacionidProducto) {
+        this.ubicacionidProducto = ubicacionidProducto;
+    }
+
+    public Collection<Visita> getVisitaCol() {
+        return visitaCol;
+    }
+
+    public void setVisitaCol(Collection<Visita> visitaCol) {
+        this.visitaCol = visitaCol;
+    }
+
+    public Collection<Suscripcion> getSuscripcionCol() {
+        return suscripcionCol;
+    }
+
+    public void setSuscripcionCol(Collection<Suscripcion> suscripcionCol) {
+        this.suscripcionCol = suscripcionCol;
+    }
+
+    public Collection<Promocion> getPromocionCol() {
+        return promocionCol;
+    }
+
+    public void setPromocionCol(Collection<Promocion> promocionCol) {
+        this.promocionCol = promocionCol;
+    }
+
+    
 
     
 

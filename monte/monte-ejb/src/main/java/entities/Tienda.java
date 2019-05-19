@@ -8,12 +8,14 @@ package entities;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.TableGenerator;
@@ -37,16 +39,22 @@ public class Tienda implements Serializable {
             strategy = GenerationType.TABLE,
             generator = "Tienda")
     private Integer id;
-    private String name;
+    private String nombre;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date packegedTime;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date minimumTime;
-    @OneToMany(mappedBy = "storeId")
+    @OneToMany(mappedBy = "storeIdProducto")
     private Collection<Producto> productCol;
     @OneToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "User_ID")
     private Cliente creadorUserId;
+    @OneToMany(mappedBy = "storeIdMensaje")
+    private Collection<Mensaje> mensajeCol;
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Ubicacion ubicacionidTienda;
+    @OneToMany(mappedBy = "storeIdPromocion")
+    private Collection<Promocion> promocionCol;
 
     public Tienda() {
     }
@@ -55,9 +63,9 @@ public class Tienda implements Serializable {
         this.id = id;
     }
 
-    public Tienda(Integer id, String name, Date packegedTime, Date minimumTime) {
+    public Tienda(Integer id, String nombre, Date packegedTime, Date minimumTime) {
         this.id = id;
-        this.name = name;
+        this.nombre = nombre;
         this.packegedTime = packegedTime;
         this.minimumTime = minimumTime;
     }
@@ -70,12 +78,12 @@ public class Tienda implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public Date getPackegedTime() {
@@ -109,6 +117,32 @@ public class Tienda implements Serializable {
     public void setCreadorUserId(Cliente creadorUserId) {
         this.creadorUserId = creadorUserId;
     }
+
+    public Collection<Mensaje> getMensajeCol() {
+        return mensajeCol;
+    }
+
+    public void setMensajeCol(Collection<Mensaje> mensajeCol) {
+        this.mensajeCol = mensajeCol;
+    }
+
+    public Ubicacion getUbicacionidTienda() {
+        return ubicacionidTienda;
+    }
+
+    public void setUbicacionidTienda(Ubicacion ubicacionidTienda) {
+        this.ubicacionidTienda = ubicacionidTienda;
+    }
+
+    public Collection<Promocion> getPromocionCol() {
+        return promocionCol;
+    }
+
+    public void setPromocionCol(Collection<Promocion> promocionCol) {
+        this.promocionCol = promocionCol;
+    }
+
+    
     
     
 
