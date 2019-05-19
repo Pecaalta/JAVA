@@ -55,7 +55,7 @@ public class Producto implements Serializable {
     private Collection<Visita> visitaCol;
     @OneToMany(mappedBy = "productoidSusc")
     private Collection<Suscripcion> suscripcionCol;
-    @OneToMany(mappedBy = "productoidPromocion")
+    @OneToMany(mappedBy = "productoIdPromocion")
     private Collection<Promocion> promocionCol;
     
 
