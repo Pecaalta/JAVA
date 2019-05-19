@@ -6,12 +6,17 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
@@ -47,6 +52,18 @@ public class Cliente implements Serializable {
     private Date fecNac;
     @OneToOne(mappedBy = "creadorUserId")
     private Tienda storeCollection;
+    @OneToMany (mappedBy = "UseridCompra")
+    private Collection<Compra> compraCol;
+    @OneToMany(mappedBy = "UseridVisita")
+    private Collection<Visita> visitedCol;
+    @OneToMany(mappedBy = "UseridSusc")
+    private Collection<Suscripcion> suscripcionCol;
+    @OneToMany(mappedBy = "UseridMensaje")
+    private Collection<Mensaje> mensajeCol;
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Ubicacion ubicacionidCliente;
+    
+    
 
     public Cliente() {
     }
@@ -65,9 +82,7 @@ public class Cliente implements Serializable {
         this.password = password;
         this.fecNac = fecNac;
     }
-    
-    
-    
+
     public Long getId() {
         return id;
     }
@@ -100,6 +115,14 @@ public class Cliente implements Serializable {
         this.email = email;
     }
 
+    public String getEmailVerificado() {
+        return emailVerificado;
+    }
+
+    public void setEmailVerificado(String emailVerificado) {
+        this.emailVerificado = emailVerificado;
+    }
+
     public String getSexo() {
         return sexo;
     }
@@ -124,14 +147,6 @@ public class Cliente implements Serializable {
         this.fecNac = fecNac;
     }
 
-    public String getEmailVerificado() {
-        return emailVerificado;
-    }
-
-    public void setEmailVerificado(String emailVerificado) {
-        this.emailVerificado = emailVerificado;
-    }
-
     public Tienda getStoreCollection() {
         return storeCollection;
     }
@@ -139,6 +154,48 @@ public class Cliente implements Serializable {
     public void setStoreCollection(Tienda storeCollection) {
         this.storeCollection = storeCollection;
     }
+
+    public Collection<Compra> getCompraCol() {
+        return compraCol;
+    }
+
+    public void setCompraCol(Collection<Compra> compraCol) {
+        this.compraCol = compraCol;
+    }
+
+    public Collection<Visita> getVisitedCol() {
+        return visitedCol;
+    }
+
+    public void setVisitedCol(Collection<Visita> visitedCol) {
+        this.visitedCol = visitedCol;
+    }
+
+    public Collection<Suscripcion> getSuscripcionCol() {
+        return suscripcionCol;
+    }
+
+    public void setSuscripcionCol(Collection<Suscripcion> suscripcionCol) {
+        this.suscripcionCol = suscripcionCol;
+    }
+
+    public Collection<Mensaje> getMensajeCol() {
+        return mensajeCol;
+    }
+
+    public void setMensajeCol(Collection<Mensaje> mensajeCol) {
+        this.mensajeCol = mensajeCol;
+    }
+
+    public Ubicacion getUbicacionidCliente() {
+        return ubicacionidCliente;
+    }
+
+    public void setUbicacionidCliente(Ubicacion ubicacionidCliente) {
+        this.ubicacionidCliente = ubicacionidCliente;
+    }
+
+   
     
     @Override
     public int hashCode() {
