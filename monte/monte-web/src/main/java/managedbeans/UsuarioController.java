@@ -69,6 +69,7 @@ public class UsuarioController implements Serializable {
             if(cl != null){
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", cl);
                 redireccion = "/protegido/report?faces-redirect=true";
+                cliente = cl;
             }
             else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso","Cagamos dijo ramos"));
@@ -98,6 +99,7 @@ public class UsuarioController implements Serializable {
             prueba.setNombre(cliente.getNombre());
             prueba.setEmail(cliente.getEmail());
             prueba.setPassword(cliente.getPassword());
+            prueba.setTipo(2);//0 admin monte, 1 admin tienda, 2 cliente normal
             if(clienteEJB.findClienteByEmail(prueba.getEmail()) == null){
                 cliente.setEmailVerificado(RandomUtilidad.randomString(10));
                 prueba.setEmailVerificado(cliente.getEmailVerificado());
