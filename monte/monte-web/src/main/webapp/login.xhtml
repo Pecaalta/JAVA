@@ -10,7 +10,12 @@
         <meta name="google-signin-client_id" content="41773803941-p9l0sms3ggnmto9rj2qphfcukfufj4bo.apps.googleusercontent.com"/>
         <script src="https://apis.google.com/js/platform.js" async="async" defer="defer"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-       
+        <style>
+            .ui-link {
+                padding: 0.5rem 0.8rem;
+                display: inline-block;
+            }
+        </style>
     </h:head>
     <h:body>
         <h:form>
@@ -30,6 +35,7 @@
             
             
             <p:link value="Crea una cuenta" outcome="registro" />
+            <p:link value="Registrarta tu tienda" outcome="registroTienda" />
             
         </h:form>
         <p:separator />

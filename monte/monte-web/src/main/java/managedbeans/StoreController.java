@@ -5,12 +5,26 @@
  */
 package managedbeans;
 
+import EJB.CompraFacadeLocal;
+import EJB.ClienteFacadeLocal;
+import EJB.TiendaFacadeLocal;
+import EJB.ProductoFacadeLocal;
+import entities.Cliente;
+import entities.Compra;
+import entities.Producto;
+import entities.Tienda;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -19,6 +33,7 @@ import models.ChartPoint;
 import models.ChartSeriesData;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.chart.*;
+import utilidades.RandomUtilidad;
 
 @Named(value = "StoreController")
 @ViewScoped
@@ -35,14 +50,29 @@ public class StoreController implements Serializable {
     private Integer Max = 2000; 
     
     private String Name = "Tienda";
- 
     
+    private Producto producto;
+    private Tienda tienda;
+    private List<Producto> productCol;
+    private List<Compra> compraCol;
+    @EJB
+    private TiendaFacadeLocal TiendaEJB;
+    @EJB
+    private ProductoFacadeLocal ProductoEJB;
+    @EJB
+    private ClienteFacadeLocal ClienteEJB;
+    @EJB
+    private CompraFacadeLocal CompraEJB;
+     
     public BarChartModel bar() {
         return barModel;
     }
     
     @PostConstruct
     public void init() {
+        productCol = new ArrayList<Producto>();
+        productCol = new ArrayList<Producto>();
+        producto = new Producto();
         SeriesBarChart = new ArrayList(); 
         ChartSeriesData data = new ChartSeriesData();
         data.setTitle("Datos 1");
@@ -90,4 +120,102 @@ public class StoreController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
  
+    public void guardaProducto(){
+        try {
+            
+            Producto prueba = new Producto();
+            prueba.setDescripcion(producto.getDescripcion());
+            prueba.setPublicado(new Date());
+            prueba.setTitulo(producto.getTitulo());
+            prueba.setDestacado(producto.getDestacado());
+            prueba.setDisponible(producto.getDisponible());
+            prueba.setStoreIdProducto(producto.getStoreIdProducto());
+            
+            FacesContext context = FacesContext.getCurrentInstance();
+            Cliente c = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+            tienda = c.getStoreCollection();
+            Collection<Producto> ct =  tienda.getProductCol();
+            ct.add(prueba);
+            tienda.setProductCol(ct);
+            TiendaEJB.edit(tienda);
+            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso","Se a guardaro el producto"));
+
+            
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso","Error"));
+        }
+    }
+
+    
+    
+    public void cargarlistado() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Cliente c = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+        tienda = c.getStoreCollection();
+        productCol = new ArrayList<Producto>(tienda.getProductCol());
+    }
+    
+    public void cargarproducto() {
+        producto = ProductoEJB.find(producto.getId());
+    }
+    public void cargarCompras() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Cliente c = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+        compraCol = new ArrayList<Compra>(c.getCompraCol());
+    }
+    
+    public void comprar() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Cliente c = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+        if (c != null) {
+            Collection<Compra> co = c.getCompraCol();
+            Compra compra = new Compra();
+            compra.setProductoidCompra(producto);
+            compra.setUseridCompra(c);
+            co.add(compra);
+            c.setCompraCol(co);
+            ClienteEJB.edit(c);
+        } else {
+            try {
+                context.getExternalContext().redirect("/login?faces-redirect=true");
+            } catch (IOException ex) {
+                Logger.getLogger(StoreController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public List<Compra> getCompraCol() {
+        return compraCol;
+    }
+
+    public void setCompraCol(List<Compra> compraCol) {
+        this.compraCol = compraCol;
+    }
+    
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public Tienda getTienda() {
+        return tienda;
+    }
+
+    public void setTienda(Tienda tienda) {
+        this.tienda = tienda;
+    }
+
+    public List<Producto> getProductCol() {
+        return productCol;
+    }
+
+    public void setProductCol(List<Producto> productCol) {
+        this.productCol = productCol;
+    }
+
+    
 }

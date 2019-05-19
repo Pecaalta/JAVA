@@ -3,6 +3,13 @@
     width: 100%;
 
 }
+.w-100 {
+    width: 100%;
+}
+.maxw-1000 {
+    max-width: 1000px;
+    margin: 0 auto;
+}
 
 .ui-menu.ui-widget {
     border-radius: 0px;

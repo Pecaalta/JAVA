@@ -45,6 +45,7 @@ public class Producto implements Serializable {
     private String titulo;
     private short destacado;
     private int disponible;
+    private float precio;
     @ManyToOne (optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Tienda storeIdProducto;
     @OneToMany(mappedBy = "productoidCompra")
@@ -169,6 +170,14 @@ public class Producto implements Serializable {
 
     public void setPromocionCol(Collection<Promocion> promocionCol) {
         this.promocionCol = promocionCol;
+    }
+
+    public float getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(float precio) {
+        this.precio = precio;
     }
 
     
