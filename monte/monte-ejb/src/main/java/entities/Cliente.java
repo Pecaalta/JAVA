@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -44,9 +45,29 @@ public class Cliente implements Serializable {
     private String password;
     @Temporal(TemporalType.DATE)
     private Date fecNac;
-    
-    
+    @OneToOne(mappedBy = "creadorUserId")
+    private Tienda storeCollection;
 
+    public Cliente() {
+    }
+
+    public Cliente(Long id) {
+        this.id = id;
+    }
+    
+    public Cliente(Long id, String nombre, String apellido, String email, String emailVerificado, String sexo, String password, Date fecNac) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.emailVerificado = emailVerificado;
+        this.sexo = sexo;
+        this.password = password;
+        this.fecNac = fecNac;
+    }
+    
+    
+    
     public Long getId() {
         return id;
     }
@@ -111,6 +132,13 @@ public class Cliente implements Serializable {
         this.emailVerificado = emailVerificado;
     }
 
+    public Tienda getStoreCollection() {
+        return storeCollection;
+    }
+
+    public void setStoreCollection(Tienda storeCollection) {
+        this.storeCollection = storeCollection;
+    }
     
     @Override
     public int hashCode() {
