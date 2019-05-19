@@ -50,6 +50,7 @@ public class Cliente implements Serializable {
     private String password;
     @Temporal(TemporalType.DATE)
     private Date fecNac;
+    private int tipo;
     @OneToOne(mappedBy = "creadorUserId")
     private Tienda storeCollection;
     @OneToMany (mappedBy = "UseridCompra")
@@ -194,6 +195,16 @@ public class Cliente implements Serializable {
     public void setUbicacionidCliente(Ubicacion ubicacionidCliente) {
         this.ubicacionidCliente = ubicacionidCliente;
     }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+    
+    
 
    
     

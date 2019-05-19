@@ -35,9 +35,9 @@ public class Mensaje implements Serializable {
         generator="Mensaje")
     private Long id;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date end;
+    private Date fin;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date start;
+    private Date comienzo;
     
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Tienda storeIdMensaje;
@@ -51,10 +51,10 @@ public class Mensaje implements Serializable {
         this.id = id;
     }
 
-    public Mensaje(Long id, Date end, Date start) {
+    public Mensaje(Long id, Date fin, Date comienzo) {
         this.id = id;
-        this.end = end;
-        this.start = start;
+        this.fin = fin;
+        this.comienzo = comienzo;
     }
 
     public Long getId() {
@@ -66,19 +66,19 @@ public class Mensaje implements Serializable {
     }
 
     public Date getEnd() {
-        return end;
+        return fin;
     }
 
-    public void setEnd(Date end) {
-        this.end = end;
+    public void setEnd(Date fin) {
+        this.fin = fin;
     }
 
     public Date getStart() {
-        return start;
+        return comienzo;
     }
 
-    public void setStart(Date start) {
-        this.start = start;
+    public void setStart(Date comienzo) {
+        this.comienzo = comienzo;
     }
 
     public Tienda getStoreIdMensaje() {
