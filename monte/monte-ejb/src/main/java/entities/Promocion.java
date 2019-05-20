@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -35,16 +36,16 @@ public class Promocion implements Serializable {
         generator="Promocion")
     private Long id;
     private float porcentaje;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(TemporalType.DATE)
     private Date start;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(TemporalType.DATE)
     private Date finish;
     private String titulo;
     private float precio;
     private int repeticion;
     private String descripcion;
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Producto productoIdPromocion;
+    private Producto productoidPromocion;
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Tienda storeIdPromocion;
 
@@ -129,12 +130,12 @@ public class Promocion implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Producto getProductoIdPromocion() {
-        return productoIdPromocion;
+    public Producto getProductoidPromocion() {
+        return productoidPromocion;
     }
 
-    public void setProductoIdPromocion(Producto productoIdPromocion) {
-        this.productoIdPromocion = productoIdPromocion;
+    public void setProductoidPromocion(Producto productoIdPromocion) {
+        this.productoidPromocion = productoIdPromocion;
     }
 
     public Tienda getStoreIdPromocion() {

@@ -6,9 +6,11 @@
 package EJB;
 
 import entities.Producto;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +30,16 @@ public class ProductoFacade extends AbstractFacade<Producto> implements Producto
     public ProductoFacade() {
         super(Producto.class);
     }
-    
+
+    @Override
+    public List<Producto> listar(){
+
+        Query q = em.createNativeQuery("SELECT id, descripcion, destacado, disponible, publicado, titulo, storeidproducto_id, ubicacionidproducto_id\n"
+                + "	FROM public.producto;", Producto.class);
+        
+        List<Producto> lst = q.getResultList();
+        return lst;
+
+    }
+
 }

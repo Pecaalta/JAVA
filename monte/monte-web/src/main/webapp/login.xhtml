@@ -20,7 +20,7 @@
             <p:inputText id="txtEmail" value="#{UsuarioController.cliente.email}" required="true" />
             
             <p:outputLabel for="txtPassword" value="Password"/>
-            <p:inputText id="txtPassword" value="#{UsuarioController.cliente.password}" required="true" />
+            <p:inputText type="password" id="txtPassword" value="#{UsuarioController.cliente.password}" required="true" />
             
             <h:column />
             <p:commandButton icon="ui-icon-key" value="Iniciar sesion" styleClass="ui-priority-primary"  action="#{UsuarioController.iniciarSesion()}"/>
