@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.CascadeType;
@@ -40,9 +41,9 @@ public class Tienda implements Serializable {
             generator = "Tienda")
     private Integer id;
     private String nombre;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIME)
     private Date packegedTime;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIME)
     private Date minimumTime;
     @OneToMany(mappedBy = "storeIdProducto")
     private Collection<Producto> productCol;
