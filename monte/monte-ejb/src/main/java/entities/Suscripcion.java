@@ -22,39 +22,36 @@ import javax.persistence.Temporal;
  * @author sebad
  */
 @Entity
-public class Mensaje implements Serializable {
+public class Suscripcion implements Serializable {
 
     private static final long serialVersionUID = 1L;
-     @TableGenerator(
-        name = "Mensaje",
+    @TableGenerator(
+        name = "Suscripcion",
         allocationSize = 1,
         initialValue = 1)
     @Id
     @GeneratedValue(
         strategy = GenerationType.TABLE,
-        generator="Mensaje")
+        generator="Suscripcion")
     private Long id;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fin;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date comienzo;
+    private Date date;
     
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Tienda storeIdMensaje;
+    private Cliente UseridSusc;
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Cliente UseridMensaje;
+    private Producto productoidSusc;
 
-    public Mensaje() {
+    public Suscripcion() {
     }
 
-    public Mensaje(Long id) {
+    public Suscripcion(Long id) {
         this.id = id;
     }
 
-    public Mensaje(Long id, Date fin, Date comienzo) {
+    public Suscripcion(Long id, Date date) {
         this.id = id;
-        this.fin = fin;
-        this.comienzo = comienzo;
+        this.date = date;
     }
 
     public Long getId() {
@@ -65,39 +62,31 @@ public class Mensaje implements Serializable {
         this.id = id;
     }
 
-    public Date getEnd() {
-        return fin;
+    public Date getDate() {
+        return date;
     }
 
-    public void setEnd(Date fin) {
-        this.fin = fin;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    public Date getStart() {
-        return comienzo;
+    public Cliente getUseridSusc() {
+        return UseridSusc;
     }
 
-    public void setStart(Date comienzo) {
-        this.comienzo = comienzo;
+    public void setUseridSusc(Cliente UseridSusc) {
+        this.UseridSusc = UseridSusc;
     }
 
-    public Tienda getStoreIdMensaje() {
-        return storeIdMensaje;
+    public Producto getProductoidSusc() {
+        return productoidSusc;
     }
 
-    public void setStoreIdMensaje(Tienda storeIdMensaje) {
-        this.storeIdMensaje = storeIdMensaje;
+    public void setProductoidSusc(Producto productoidSusc) {
+        this.productoidSusc = productoidSusc;
     }
 
-    public Cliente getUseridMensaje() {
-        return UseridMensaje;
-    }
-
-    public void setUseridMensaje(Cliente UseridMensaje) {
-        this.UseridMensaje = UseridMensaje;
-    }
-
-    
+   
 
     @Override
     public int hashCode() {
@@ -109,10 +98,10 @@ public class Mensaje implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Mensaje)) {
+        if (!(object instanceof Suscripcion)) {
             return false;
         }
-        Mensaje other = (Mensaje) object;
+        Suscripcion other = (Suscripcion) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -121,7 +110,7 @@ public class Mensaje implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Mensaje[ id=" + id + " ]";
+        return "entities.Suscripcion[ id=" + id + " ]";
     }
     
 }

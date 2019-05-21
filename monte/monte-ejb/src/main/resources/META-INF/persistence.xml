@@ -3,6 +3,7 @@
   <persistence-unit name="com.monte_monte-ejb_ejb_1.0PU" transaction-type="JTA">
     <jta-data-source>jdbc/MonteDB</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <shared-cache-mode>ALL</shared-cache-mode>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
     </properties>

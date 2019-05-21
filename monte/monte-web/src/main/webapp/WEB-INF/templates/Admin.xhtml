@@ -4,7 +4,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:mp="http://primefaces.org/ui/material"
+      xmlns:mp="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
@@ -24,7 +24,7 @@
             <div>
                 <h:form>
                     <p:growl id="messages" showDetail="true"/>
-                    <p:commandButton id="dynaButton" value="#{UsuarioController.cliente.nombre} Name" type="button" icon="pi pi-home"/>
+                    <p:commandButton id="dynaButton" value="#{plantillaController.cliente.nombre} Name" type="button" icon="pi pi-home"/>
                     <p:slideMenu overlay="true" trigger="dynaButton" my="left top" at="left bottom" style="width:180px">
                         <p:menuitem value="Salir" action="#{UsuarioController.cerrarSecion()}" />
                     </p:slideMenu>
@@ -36,8 +36,9 @@
                 <h:form>
                     <p:growl id="messages" showDetail="false"/>
                     <p:menu>
-                        <p:menuitem value="Reportes" update="messages" icon="pi pi-chart-bar"/>
-                        <p:menuitem value="Pedidos" update="messages" icon="pi pi-map-marker"/>
+                        <p:menuitem rendered="#{plantillaController.cliente.storeCollection != null}" value="Lista Producto" outcome="/protegido/ListaProducto?faces-redirect=true"  update="messages" icon="pi pi-chart-bar"/>
+                        <p:menuitem rendered="#{plantillaController.cliente.storeCollection != null}" value="Tus productos disponibles" outcome="/protegido/CantidadProductos?faces-redirect=true"  update="messages" icon="pi pi-chart-bar"/>
+                        <p:menuitem rendered="#{plantillaController.cliente.compraCol != null}" value="Lista Compras" outcome="/protegido/ListaCompras?faces-redirect=true"  update="messages" icon="pi pi-chart-bar"/>
                         <p:menuitem value="Usuarios" update="messages" icon="pi pi-users"/>
                         <p:menuitem value="Mensajes" update="messages" icon="pi pi-comments"/>
                         <p:menuitem value="Publicar" update="messages" icon="pi pi-pencil"/>

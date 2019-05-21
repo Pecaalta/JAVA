@@ -10,44 +10,36 @@
         <meta name="google-signin-client_id" content="41773803941-p9l0sms3ggnmto9rj2qphfcukfufj4bo.apps.googleusercontent.com"/>
         <script src="https://apis.google.com/js/platform.js" async="async" defer="defer"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-       
+        <style>
+            .ui-link {
+                padding: 0.5rem 0.8rem;
+                display: inline-block;
+            }
+        </style>
     </h:head>
     <h:body>
         <h:form>
             <p:growl showDetail="true"/>
             <h:panelGrid columns="2">
-            <p:outputLabel for="txtEmail" value="Email"/>
-<<<<<<< HEAD
-         
-=======
-            <p:inputText id="txtEmail" value="#{UsuarioController.cliente.email}" required="true" />
-            
-            <p:outputLabel for="txtPassword" value="Password"/>
-            <p:inputText id="txtPassword" value="#{UsuarioController.cliente.password}" required="true" />
-            
-            <h:column />
-            <p:commandButton icon="ui-icon-key" value="Iniciar sesion" styleClass="ui-priority-primary"  action="#{UsuarioController.iniciarSesion()}"/>
-           
->>>>>>> a2bf89c4752f9cb1d08011b6044dcc45e7ce64b8
-            
+                <p:outputLabel for="txtEmail" value="Email"/>
+                <p:inputText id="txtEmail" value="#{UsuarioController.cliente.email}" autocomplete="off" required="true" widgetVar="textoEmail" />     
+                
+                <p:outputLabel for="txtPassword" value="Password"/>
+                <p:password id="txtPassword" value="#{UsuarioController.cliente.password}" promptLabel="Ingrese una clave" required="true">
+                    <f:validateLength minimum = "5" maximum = "8" />
+                </p:password>
+                <h:column />
+                <p:commandButton icon="ui-icon-key" value="Iniciar sesion" styleClass="ui-priority-primary"  action="#{UsuarioController.iniciarSesion()}"/>
             </h:panelGrid>
-            
-            
             <p:link value="Crea una cuenta" outcome="registro" />
-            
+            <p:link value="Registrarta tu tienda" outcome="registroTienda" />
         </h:form>
         <p:separator />
         <h:form id="goid">
             <div class="g-signin2" data-onsuccess="onSignIn"></div>
-<<<<<<< HEAD
-=======
             <p:inputText style="display: none" widgetVar="wve" value="#{UsuarioController.cliente.email}" />
             <h:commandButton style="display: none" id="clickButton" action="#{UsuarioController.iniciarSesionGoogle()}"/>
->>>>>>> a2bf89c4752f9cb1d08011b6044dcc45e7ce64b8
-            
-            
         </h:form>
-        
         <script>
             function onSignIn(googleUser) {
                 var profile = googleUser.getBasicProfile();
@@ -64,8 +56,14 @@
             //    xhr.onload = function() {
             //      console.log('Signed in as: ' + xhr.responseText);
             //    };
-                xhr.send("email=" + profile.getEmail());
-
+                
+                
+                
+                xhr.send("email=" + profile.getEmail() + 
+                        "&amp;nombre=" + profile.getGivenName() + 
+                        "&amp;apellido=" + profile.getFamilyName());
+                //xhr.send("nombre=" + profile.getGivenName());
+                //xhr.send("apellido=" + profile.getFamilyName());
 
 
                 PF('wve').jq.val(profile.getEmail());

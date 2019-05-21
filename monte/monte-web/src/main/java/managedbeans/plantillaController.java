@@ -30,7 +30,7 @@ public class plantillaController implements Serializable{
     
     @EJB
     private ClienteFacadeLocal clienteEJB;
-    
+    private Cliente cliente;
     public void verificarSesion(){
         
 //        Cliente clGoogle;
@@ -43,8 +43,8 @@ public class plantillaController implements Serializable{
         
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            Cliente c = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
-            if(c == null){
+            cliente = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+            if(cliente == null){
                context.getExternalContext().redirect("../permisos.xhtml");
             } else {
                 
@@ -56,6 +56,14 @@ public class plantillaController implements Serializable{
     
     public void printChart() {
          
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
     
 }

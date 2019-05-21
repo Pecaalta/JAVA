@@ -5,12 +5,27 @@
  */
 package managedbeans;
 
+import EJB.PagoFacadeLocal;
+import EJB.ClienteFacadeLocal;
+import EJB.TiendaFacadeLocal;
+import EJB.ProductoFacadeLocal;
+import entities.Cliente;
+import entities.Compra;
+import entities.Pago;
+import entities.Producto;
+import entities.Tienda;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -19,6 +34,7 @@ import models.ChartPoint;
 import models.ChartSeriesData;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.chart.*;
+import utilidades.RandomUtilidad;
 
 @Named(value = "StoreController")
 @ViewScoped
@@ -35,14 +51,34 @@ public class StoreController implements Serializable {
     private Integer Max = 2000; 
     
     private String Name = "Tienda";
- 
     
+    private Producto producto;
+    private Tienda tienda;
+    private Pago pago;
+    private Compra compra;
+    private Cliente cliente;
+    
+    private List<Producto> productCol;
+    private List<Compra> compraCol;
+    @EJB
+    private TiendaFacadeLocal TiendaEJB;
+    @EJB
+    private ProductoFacadeLocal ProductoEJB;
+    @EJB
+    private ClienteFacadeLocal ClienteEJB;
+    @EJB
+    private PagoFacadeLocal PagoEJB;
+     
     public BarChartModel bar() {
         return barModel;
     }
     
     @PostConstruct
     public void init() {
+        productCol = new ArrayList<Producto>();
+        compra = new Compra();
+        producto = new Producto();
+        pago = new Pago();
         SeriesBarChart = new ArrayList(); 
         ChartSeriesData data = new ChartSeriesData();
         data.setTitle("Datos 1");
@@ -54,6 +90,14 @@ public class StoreController implements Serializable {
         data.setData(lista);
         SeriesBarChart.add(data);
         createBarModels();
+    }
+
+    public Pago getPago() {
+        return pago;
+    }
+
+    public void setPago(Pago pago) {
+        this.pago = pago;
     }
  
     private void createBarModels() {
@@ -90,4 +134,110 @@ public class StoreController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
  
+    public void guardaProducto(){
+        try {
+            
+            Producto prueba = new Producto();
+            prueba.setDescripcion(producto.getDescripcion());
+            prueba.setPublicado(new Date());
+            prueba.setTitulo(producto.getTitulo());
+            prueba.setDestacado(producto.getDestacado());
+            prueba.setDisponible(producto.getDisponible());
+            prueba.setStoreIdProducto(producto.getStoreIdProducto());
+            
+            FacesContext context = FacesContext.getCurrentInstance();
+            Cliente c = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+            tienda = c.getStoreCollection();
+            Collection<Producto> ct =  tienda.getProductCol();
+            ct.add(prueba);
+            tienda.setProductCol(ct);
+            TiendaEJB.edit(tienda);
+            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso","Se a guardaro el producto"));
+
+            
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso","Error"));
+        }
+    }
+
+    
+    
+    public void cargarlistado() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Cliente c = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+        tienda = c.getStoreCollection();
+        productCol = new ArrayList<Producto>(tienda.getProductCol());
+    }
+    
+    public void cargarproducto() {
+        producto = ProductoEJB.find(producto.getId());
+    }
+    public void cargarCompras() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        cliente = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+        compraCol = new ArrayList<Compra>(cliente.getCompraCol());
+    }
+    
+    public void pagar() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        cliente = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+        if (cliente != null) {
+            context.getExternalContext().getSessionMap().put("producto", producto);
+            context.getExternalContext().redirect("pagar.xhtml?faces-redirect=true");
+        }else {
+            context.getExternalContext().redirect("login.xhtml?faces-redirect=true");
+        }
+    }
+    public void comprar() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        cliente = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+        producto = (Producto) context.getExternalContext().getSessionMap().get("producto");
+        if (cliente != null) {
+            Collection<Compra> co = cliente.getCompraCol();
+            compra.setProductoidCompra(producto);
+            compra.setUseridCompra(cliente);
+            compra.setPago(pago);
+            co.add(compra);
+            cliente.setCompraCol(co);
+            ClienteEJB.edit(cliente);
+            context.getExternalContext().redirect("protegido/ListaCompras.xhtml?faces-redirect=true");
+        } else {
+            context.getExternalContext().redirect("login.xhtml?faces-redirect=true");
+        }
+    }
+
+    public List<Compra> getCompraCol() {
+        return compraCol;
+    }
+
+    public void setCompraCol(List<Compra> compraCol) {
+        this.compraCol = compraCol;
+    }
+    
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public Tienda getTienda() {
+        return tienda;
+    }
+
+    public void setTienda(Tienda tienda) {
+        this.tienda = tienda;
+    }
+
+    public List<Producto> getProductCol() {
+        return productCol;
+    }
+
+    public void setProductCol(List<Producto> productCol) {
+        this.productCol = productCol;
+    }
+
+    
 }

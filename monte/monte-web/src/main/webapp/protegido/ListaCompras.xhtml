@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <head>
+        <title>Listado de productos</title>
+    </head>
+    <body>
+        <ui:composition template="./../WEB-INF/templates/Admin.xhtml">
+            <ui:define name="content">
+                <f:event type="preRenderView" listener="#{StoreController.cargarCompras()}"/> 
+                <h:form>
+                    <p:commandButton value="Recarga datos" styleClass="ui-priority-primary"  action="#{StoreController.cargarCompras()}"/>
+                </h:form>
+                <h:form id="goid">
+                    <p:dataTable var="car" value="#{StoreController.compraCol}">
+                        <p:column headerText="titulo">
+                            <h:outputText value="#{car.productoidCompra.titulo}" />
+                        </p:column>
+                        <p:column headerText="Precio">
+                            <h:outputText value="#{car.productoidCompra.precio}" />
+                        </p:column>
+                        <p:column headerText="Estado">
+                            <h:outputText rendered="#{car.pago == null}" value="No Pagado" />                            
+                            <h:outputText rendered="#{car.pago != null}" value="Pagado" />
+                        </p:column>
+                        <p:column styleClass="w-100px" headerText="Acciones">
+                            <h:commandButton styleClass="ui-priority-primary" value="Calificar" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
