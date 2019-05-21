@@ -166,10 +166,10 @@
             map.addLayer(layerLines);
           }
         }
-      }
+      };
 
-      xhr.onerror = function(e) { console.log("error"); }
-      xhr.ontimeout = function(e) { console.log("timeout"); }
+      xhr.onerror = function(e) { console.log("error"); };
+      xhr.ontimeout = function(e) { console.log("timeout"); };
 
       xhr.open("GET", url, true);
       xhr.timeout = 3000;
@@ -192,10 +192,10 @@
               distanciaFaltante= JSON.parse(xhr_dist.responseText).resourceSets[0].resources[0].travelDistance;
             }
           }
-        }
+        };
 
-        xhr_dist.onerror = function(e) { console.log("error"); }
-        xhr_dist.ontimeout = function(e) { console.log("timeout"); }
+        xhr_dist.onerror = function(e) { console.log("error"); };
+        xhr_dist.ontimeout = function(e) { console.log("timeout"); };
 
         xhr_dist.open("GET", url_dist, true);
         xhr_dist.timeout = 3000;
@@ -279,10 +279,10 @@
                 }
               }
             }
-          }
+          };
 
-          xhr_x.onerror = function(e) { console.log("error"); }
-          xhr_x.ontimeout = function(e) { console.log("timeout"); }
+          xhr_x.onerror = function(e) { console.log("error"); };
+          xhr_x.ontimeout = function(e) { console.log("timeout"); };
 
           xhr_x.open("GET", url_x, true);
           xhr_x.timeout = 3000;
