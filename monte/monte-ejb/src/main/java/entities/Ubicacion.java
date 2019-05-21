@@ -31,7 +31,11 @@ public class Ubicacion implements Serializable {
         strategy = GenerationType.TABLE,
         generator="Ubicacion")
     private Long id;
-    private float ubicacion;
+    
+    private String nombre;
+    private float lat;
+    private float lon;
+    
     @OneToMany(mappedBy = "ubicacionidCliente")
     private Collection<Cliente> clienteCol;
     @OneToMany(mappedBy = "ubicacionidCompra")
@@ -48,9 +52,11 @@ public class Ubicacion implements Serializable {
         this.id = id;
     }
 
-    public Ubicacion(Long id, float ubicacion) {
+    public Ubicacion(Long id, float lat, float lon, String nom) {
         this.id = id;
-        this.ubicacion = ubicacion;
+        this.lat = lat;
+        this.lon = lon;
+        this.nombre= nom;
     }
 
     public Long getId() {
@@ -61,12 +67,28 @@ public class Ubicacion implements Serializable {
         this.id = id;
     }
 
-    public float getUbicacion() {
-        return ubicacion;
+    public float getLat() {
+        return lat;
     }
 
-    public void setUbicacion(float ubicacion) {
-        this.ubicacion = ubicacion;
+    public void setLat(float lat) {
+        this.lat = lat;
+    }
+
+    public float getLon() {
+        return lon;
+    }
+
+    public void setLon(float lon) {
+        this.lon = lon;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public Collection<Cliente> getClienteCol() {

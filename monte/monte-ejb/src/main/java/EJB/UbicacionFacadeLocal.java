@@ -30,4 +30,10 @@ public interface UbicacionFacadeLocal {
 
     int count();
     
+    Ubicacion buscarUbicacionPorNombre(String nom);
+    
+    Ubicacion buscarUbicacionPorCoordenadas(String lon, String lat);
+    
+  //  String crearUbicacion(String nom, String lon, String lat);
+    
 }

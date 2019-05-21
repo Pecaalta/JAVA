@@ -4,23 +4,310 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
+    
+    <head>
+    <title>Tracking de envio</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://openlayers.org/en/v5.3.0/css/ol.css" type="text/css">
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
 
-    <body>
+  </head>
+  <body>
+    <div id="map" class="map" style="width: 1000px; height: 550px;"></div>
+    <button onclick="alerta()">Obtener Distancia</button>
+    <button onclick="alertaDistanciaFaltante()">Obtener Distancia faltante</button>
+    <input type="button" value="URL Api Bing" onclick="javascript:window.open(url,'','width=1500,height=800,left=50,top=50,toolbar=yes');" />
+    <button onclick="eventoAvanzar()">Avanzar</button>
+    <button onclick="obtenerInicioRecorrido()">Obtener coordenadas inicio recorrido</button>
 
-        <ui:composition template="./../WEB-INF/templates/Admin.xhtml">
+    <script>
 
-            <ui:define name="content">
-                <h:form>
-                    <b:openStreetMap width="100%" height="500px"
-                        center="42.3402,-3.6972" marker="42.3396,-3.6972"
-                        popupMsg="Museo de la evolución humana, Burgos, Spain. Don\'t miss it if you are visiting Spain!"
-                        zoom="17"
-        urlTemplate="https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png" 
-                        />
-                </h:form>
-            </ui:define>
+     /*        PARAMETROS
 
-        </ui:composition>
+      inicioRecorrido[lon, lat];
+      finRecorrido[lon, lat];
+      lugarActualRecorrido[lon, lat];
 
-    </body>
+     */
+
+      var Feature = ol.Feature;
+      var Map = ol.Map;
+      var View = ol.View;
+      var Polyline = ol.format.Polyline;
+      var Point = ol.geom.Point;
+      var {Tile, Vector} = ol.layer;
+      var BingMaps = ol.source.BingMaps;
+      var VectorSource = ol.source.Vector;
+      var {Circle, Fill, Icon, Stroke, Style} = ol.style;
+      var distancia;
+      var distanciaFaltante;
+      var arrayTramo;
+      var largoTramo;
+
+  //    var inicioRecorrido=  ol.proj.fromLonLat([-56.535929, -34.38194]);
+      var inicioRecorrido=  ol.proj.fromLonLat([-56.16471, -34.89763]);
+      var finRecorrido=     ol.proj.fromLonLat([-56.70675, -34.33821]);
+      var lugarActualRecorrido =  ol.proj.fromLonLat([-56.16479, -34.89756]);
+
+      // -------------------------------------------------- CREA EL MAPA ---------------------------------------------------------------------
+      var map = new Map({
+        target: document.getElementById('map'),
+        view: new View({
+          center: ol.proj.fromLonLat([-56.6189, -34.3681]),
+          zoom: 12,
+          minZoom: 2,
+          maxZoom: 19
+        }),
+        layers: [
+          new Tile({
+            source: new BingMaps({
+              imagerySet: 'AerialWithLabels',
+              key: 'AjTgfzP5rqqdbaykfPNed-T4Y5KSIXwyhT4pAD8Q9EPcouhZsqtdp-xz4hzu6_0H'
+            })
+          })
+        ]
+      });
+      // -------------------------------------------------------------------------------------------------------------------------------------
+
+      // ------------------------------------------------ CREA LOS MARKERS -------------------------------------------------------------------
+      function crearMarker(coordenadasM){
+        var element = document.createElement('div');
+        element.innerHTML = '<img src="https://i.ibb.co/FWpfTk8/marker-def.png" />';
+        var marker = new ol.Overlay({
+            position: coordenadasM,
+            positioning: 'center-center',
+            element: element,
+            stopEvent: false
+        });
+        map.addOverlay(marker);
+      }
+
+      var markerTemp;
+      var markerTempFinal;
+
+      function crearMarkerFinal(coordenadasM_u){
+        var element = document.createElement('div');
+        element.innerHTML = '<img src="https://i.ibb.co/FWpfTk8/marker-def.png" />';
+        var marker = new ol.Overlay({
+            position: coordenadasM_u,
+            positioning: 'center-center',
+            element: element,
+            stopEvent: false
+        });
+        markerTempFinal= marker;
+        map.addOverlay(marker);
+      }
+
+      function crearMarkerActual(coordenadasM_x){
+        var element = document.createElement('div');
+        element.innerHTML = '<img src="https://i.ibb.co/ZJmWSTb/marker-def-actual.png" />';
+        var marker = new ol.Overlay({
+            position: coordenadasM_x,
+            positioning: 'center-center',
+            element: element,
+            stopEvent: false
+        });
+        markerTemp= marker;
+        map.addOverlay(marker);
+      }
+
+      function moverMarkerActual(coordenadasM_y){
+        map.removeOverlay(markerTemp);
+        var movCoords= ol.proj.fromLonLat(coordenadasM_y);
+        crearMarkerActual(movCoords);
+      }
+
+      function eliminarMarkerFinal(){
+        map.removeOverlay(markerTempFinal);
+      }
+
+      function eliminarMarkerActual(){
+        map.removeOverlay(markerTemp);
+      }
+
+      crearMarker(inicioRecorrido);
+      crearMarkerFinal(finRecorrido);
+      crearMarkerActual(lugarActualRecorrido);
+      // -------------------------------------------------------------------------------------------------------------------------------------
+
+      // ----------------------------------------------- CREAR EL RECORRIDO ------------------------------------------------------------------
+      var start = ol.proj.transform(inicioRecorrido, 'EPSG:3857', 'EPSG:4326').reverse().toString();
+      var end = ol.proj.transform(finRecorrido, 'EPSG:3857', 'EPSG:4326').reverse().toString();
+
+      var url = "https://dev.virtualearth.net/REST/v1/Routes?wp.0=" + start + "&wp.1=" + end +
+                "&routeAttributes=routePath&key=AjTgfzP5rqqdbaykfPNed-T4Y5KSIXwyhT4pAD8Q9EPcouhZsqtdp-xz4hzu6_0H";
+
+      var xhr = new XMLHttpRequest();
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+          if (xhr.status == 200) {
+            var linestring = JSON.parse(xhr.responseText).resourceSets[0].resources[0].routePath.line.coordinates;
+            arrayTramo= linestring;
+            largoTramo= linestring.length;
+            distancia= JSON.parse(xhr.responseText).resourceSets[0].resources[0].travelDistance;
+            for (var i=0; i<linestring.length; i++) {
+              linestring[i].reverse();
+            }
+            var layerLines = new ol.layer.Vector({
+              source: new ol.source.Vector({
+                features: [new ol.Feature({
+                  geometry: new ol.geom.LineString(linestring).transform('EPSG:4326', 'EPSG:3857'),
+                  name: 'Line'
+                })]
+              }),
+              style: new Style({
+                stroke: new Stroke({
+                  width: 5, color: [237, 212, 0, 0.8]
+                })
+              })
+            });
+            map.addLayer(layerLines);
+          }
+        }
+      }
+
+      xhr.onerror = function(e) { console.log("error"); }
+      xhr.ontimeout = function(e) { console.log("timeout"); }
+
+      xhr.open("GET", url, true);
+      xhr.timeout = 3000;
+      xhr.send();
+      // -------------------------------------------------------------------------------------------------------------------------------------
+
+      // ------------------------------------------- OBTENER DISTANCIA FALTANTE --------------------------------------------------------------
+      function obtenerDistanciaFaltante(){
+        var ini_dist= ol.proj.transform(lugarActualRecorrido, 'EPSG:3857', 'EPSG:4326').reverse().toString();
+        var fin_dist = ol.proj.transform(finRecorrido, 'EPSG:3857', 'EPSG:4326').reverse().toString();
+
+        var url_dist = "https://dev.virtualearth.net/REST/v1/Routes?wp.0=" + ini_dist + "&wp.1=" + fin_dist +
+                  "&routeAttributes=routePath&key=AjTgfzP5rqqdbaykfPNed-T4Y5KSIXwyhT4pAD8Q9EPcouhZsqtdp-xz4hzu6_0H";
+
+        var xhr_dist = new XMLHttpRequest();
+
+        xhr_dist.onreadystatechange = function() {
+          if (xhr_dist.readyState == 4) {
+            if (xhr_dist.status == 200) {
+              distanciaFaltante= JSON.parse(xhr_dist.responseText).resourceSets[0].resources[0].travelDistance;
+            }
+          }
+        }
+
+        xhr_dist.onerror = function(e) { console.log("error"); }
+        xhr_dist.ontimeout = function(e) { console.log("timeout"); }
+
+        xhr_dist.open("GET", url_dist, true);
+        xhr_dist.timeout = 3000;
+        xhr_dist.send();
+      }
+
+      // -------------------------------------------------------------------------------------------------------------------------------------
+
+      function cantidadDecimales(nnn){
+        var val = nnn * (-1);
+        var str = "" + val;
+        var index = str.indexOf('.');
+        if (index >= 0) {
+          return str.length - index - 1;
+        } else {
+          return 0;
+        }
+      }
+
+      function redondeo(numero, decimales) {
+        var flotante = parseFloat(numero);
+        var resultado = Math.round(flotante*Math.pow(10,decimales))/Math.pow(10,decimales);
+        return resultado;
+      }
+
+      function obtenerIndiceDeCoordsActuales(){
+        var actual = ol.proj.toLonLat(lugarActualRecorrido);
+
+        cantDec= cantidadDecimales(arrayTramo[1][0]);
+
+
+        var p1, p2, p1_0, p1_1, p2_0, p2_1;
+        p1_0= redondeo(actual[0], cantDec);
+        p1_1= redondeo(actual[1], cantDec);
+        p1= [p1_0, p1_1];
+
+        for (var i = 0; i < arrayTramo.length; i++) {
+            p2_0= redondeo(arrayTramo[i][0], cantDec);
+            p2_1= redondeo(arrayTramo[i][1], cantDec);
+            p2= [p2_0, p2_1];
+            if (p1[0] == p2[0] && p1[1] == p2[1]){
+                return i;
+            }
+        }
+      }
+
+      function avanzar(){
+        if(ol.proj.fromLonLat(arrayTramo[largoTramo-1]) != lugarActualRecorrido){
+          var start_x = ol.proj.transform(lugarActualRecorrido, 'EPSG:3857', 'EPSG:4326').reverse().toString();
+          var end_x = ol.proj.transform(finRecorrido, 'EPSG:3857', 'EPSG:4326').reverse().toString();
+
+          var url_x = "https://dev.virtualearth.net/REST/v1/Routes?wp.0=" + start_x + "&wp.1=" + end_x +
+                    "&routeAttributes=routePath&key=AjTgfzP5rqqdbaykfPNed-T4Y5KSIXwyhT4pAD8Q9EPcouhZsqtdp-xz4hzu6_0H";
+
+          var xhr_x = new XMLHttpRequest();
+
+          xhr_x.onreadystatechange = function() {
+            if (xhr_x.readyState == 4) {
+              if (xhr_x.status == 200) {
+                var linestring = JSON.parse(xhr_x.responseText).resourceSets[0].resources[0].routePath.line.coordinates;
+
+                var unCuartoDeTramo= largoTramo / 4;
+                var indActual= obtenerIndiceDeCoordsActuales();;
+                var min=indActual+1;
+                var max=indActual + largoTramo/3;
+
+                if(max > largoTramo){
+                  max= largoTramo;
+                }
+                var random =Math.floor(Math.random() * (+max - +min)) + +min;
+                if(random >= largoTramo-1){
+                  lugarActualRecorrido = ol.proj.fromLonLat(arrayTramo[largoTramo-1]);
+                  eliminarMarkerActual();
+                  eliminarMarkerFinal();
+                  crearMarkerActual(finRecorrido);
+                }
+                else{
+                  var nuevasCoords= arrayTramo[random];
+                  moverMarkerActual(nuevasCoords);
+                  lugarActualRecorrido =  ol.proj.fromLonLat(nuevasCoords);
+                }
+              }
+            }
+          }
+
+          xhr_x.onerror = function(e) { console.log("error"); }
+          xhr_x.ontimeout = function(e) { console.log("timeout"); }
+
+          xhr_x.open("GET", url_x, true);
+          xhr_x.timeout = 3000;
+          xhr_x.send();
+        }
+      }
+
+      function alerta(){
+        alert ("La distancia es: " + distancia + " Km");
+      }
+
+      function alertaDistanciaFaltante(){
+        obtenerDistanciaFaltante();
+        alert ("La distancia faltante entre la ubicación actual y el fin del tramo es: " + distanciaFaltante);
+      }
+
+      function eventoAvanzar(){
+        avanzar();
+      }
+
+      function obtenerInicioRecorrido(){
+        alert(arrayTramo[0]);
+      }
+
+    </script>
+  </body>
+    
 </html>
