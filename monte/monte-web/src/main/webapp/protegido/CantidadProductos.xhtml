@@ -12,11 +12,17 @@
 
             <ui:define name="content">
                 <f:event type="preRenderView" listener="#{ChartController.graficar()}"/> 
+                <f:event type="preRenderView" listener="#{ChartController.graficarVisitas()}"/> 
                  <h:form>
                     <p:commandButton value="Graficar" id="graficar" actionListener="#{ChartController.graficar()}" update="hpgGrafico"/>
+                    <p:commandButton value="Visitas" id="visitas" actionListener="#{ChartController.graficarVisitas()}" update="vis"/>
 
                     <h:panelGrid id="hpgGrafico">
-                        <p:chart type="bar" model="#{ChartController.barra}" style="width: 100%; height: 500px;" rendered="#{ChartController.barra != null}"/>
+                        <p:chart type="bar" model="#{ChartController.barra}" style="width: 500px; height: 500px;" rendered="#{ChartController.barra != null}"/>
+                    </h:panelGrid>
+                    
+                     <h:panelGrid id="vis">
+                         <p:chart type="bar" model="#{ChartController.barraVis}" style="width: 500px; height: 500px;" rendered="#{ChartController.barraVis != null}"/>
                     </h:panelGrid>
                 </h:form>
             </ui:define>

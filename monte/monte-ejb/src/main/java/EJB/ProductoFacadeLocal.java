@@ -6,6 +6,8 @@
 package EJB;
 
 import entities.Producto;
+import entities.Visita;
+import java.util.Collection;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -31,5 +33,7 @@ public interface ProductoFacadeLocal {
     int count();
     
     List<Producto> listar();
+    
+    List<Visita> visitas();
     
 }

@@ -5,9 +5,15 @@
  */
 package EJB;
 
+import entities.Cliente;
 import entities.Producto;
+import entities.Tienda;
+import entities.Visita;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -33,13 +39,23 @@ public class ProductoFacade extends AbstractFacade<Producto> implements Producto
 
     @Override
     public List<Producto> listar(){
-
-        Query q = em.createNativeQuery("SELECT id, descripcion, destacado, disponible, publicado, titulo, storeidproducto_id, ubicacionidproducto_id\n"
-                + "	FROM public.producto;", Producto.class);
+       
+        FacesContext context = FacesContext.getCurrentInstance();
+        Cliente c = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+        Tienda tienda = c.getStoreCollection();
+        List<Producto> ct =  (List<Producto>) tienda.getProductCol();
         
-        List<Producto> lst = q.getResultList();
+        return ct;
+    }
+    
+    @Override
+    public List<Visita> visitas(){
+        Query q = em.createNativeQuery("SELECT id, date, useridvisita_id, productoidvisita_id\n" +
+"	FROM public.visita;", Visita.class);
+        
+        List<Visita> lst = q.getResultList();
         return lst;
-
+        
     }
 
 }
