@@ -6,6 +6,7 @@
 package EJB;
 
 import entities.Cliente;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -38,4 +39,6 @@ public interface ClienteFacadeLocal {
     Cliente usuarioDeGoogle();
     
     void usuarioDeGoogleCambiarEstado(Cliente c);
+
+    List<Cliente> listadoUsuariosSistema();
 }

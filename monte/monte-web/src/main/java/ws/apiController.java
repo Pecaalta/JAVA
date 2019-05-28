@@ -76,7 +76,7 @@ public class apiController extends Application {
             c.setEmail(email);
             c.setEmailVerificado("Si");
             c.setTipo(2);
-            //c.setGoogleActivo("activo");
+            c.setEstado("activo");
             cl.create(c);
         }
 //        else{

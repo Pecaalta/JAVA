@@ -120,5 +120,25 @@ public class ClienteFacade extends AbstractFacade<Cliente> implements ClienteFac
         }
         
     }
+
+    @Override
+    public List<Cliente> listadoUsuariosSistema() {
+        
+        Cliente cliente = null;
+        String consulta = "SELECT * FROM Cliente";
+        try{
+            Query query = em.createQuery(consulta);
+            List<Cliente> lista = query.getResultList();
+                if(!lista.isEmpty()){
+                    return lista;
+                }
+        } catch (Exception e) {
+            throw e;
+        }
+        
+        return null;
+    }
+    
+    
     
 }

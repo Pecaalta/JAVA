@@ -13,6 +13,8 @@ import entities.Tienda;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -114,6 +116,7 @@ public class UsuarioController implements Serializable {
             prueba.setTipo(1);
             prueba.setEmail(cliente.getEmail());
             prueba.setPassword(cliente.getPassword());
+            prueba.setEstado("activo");
             
             Tienda pruebaTienda = new Tienda();
             pruebaTienda.setNombre(tienda.getNombre());
@@ -151,6 +154,7 @@ public class UsuarioController implements Serializable {
             prueba.setEmail(cliente.getEmail());
             prueba.setPassword(cliente.getPassword());
             prueba.setTipo(2);//0 admin monte, 1 admin tienda, 2 cliente normal
+            prueba.setEstado("activo");
             if(clienteEJB.findClienteByEmail(prueba.getEmail()) == null){
                 cliente.setEmailVerificado(RandomUtilidad.randomString(10));
                 prueba.setEmailVerificado(cliente.getEmailVerificado());
@@ -168,7 +172,14 @@ public class UsuarioController implements Serializable {
         }
     }
     
+    /*
+    Administrador
+    */
     
+    private List<Cliente> clienteCol;
     
+    public void usuariosDelSistema(){
+        clienteCol = new ArrayList<>(clienteEJB.listadoUsuariosSistema());
+    }
     
 }

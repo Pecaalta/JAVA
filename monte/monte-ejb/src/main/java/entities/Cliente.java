@@ -63,7 +63,7 @@ public class Cliente implements Serializable {
     private Collection<Mensaje> mensajeCol;
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Ubicacion ubicacionidCliente;
-    
+    private String estado;
     
 
     public Cliente() {
@@ -202,6 +202,14 @@ public class Cliente implements Serializable {
 
     public void setTipo(int tipo) {
         this.tipo = tipo;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
     
     
