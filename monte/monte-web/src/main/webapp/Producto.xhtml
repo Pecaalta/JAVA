@@ -17,6 +17,7 @@
 
             <ui:define name="content">
                 <f:event type="preRenderView" listener="#{StoreController.cargarproducto()}"/>
+                <h2 rendered="#{StoreController.producto == null}" >No se encontro el producto</h2>
                 <div>
                     <h:outputText styleClass="titulo" value="#{StoreController.producto.titulo}" /> 
                     <h:outputText styleClass="titulo" value="#{StoreController.producto.id}" />
@@ -27,9 +28,9 @@
                 <div>
                     <h:outputText styleClass="descripcion" value="#{StoreController.producto.descripcion}" />
                 </div>
-                
+
                 <h:form>
-                    <p:commandButton value="Comprar" styleClass="ui-priority-primary"  action="#{StoreController.comprar()}"/>
+                    <p:commandButton value="Cprar"   action="#{StoreController.pagar()}"/>
                 </h:form>
             </ui:define>
         </ui:composition>

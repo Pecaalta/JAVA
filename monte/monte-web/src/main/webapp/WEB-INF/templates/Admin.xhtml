@@ -37,8 +37,8 @@
                     <p:growl id="messages" showDetail="false"/>
                     <p:menu>
                         <p:menuitem rendered="#{plantillaController.cliente.storeCollection != null}" value="Lista Producto" outcome="/protegido/ListaProducto?faces-redirect=true"  update="messages" icon="pi pi-chart-bar"/>
+                        <p:menuitem rendered="#{plantillaController.cliente.storeCollection != null}" value="Tus productos disponibles" outcome="/protegido/CantidadProductos?faces-redirect=true"  update="messages" icon="pi pi-chart-bar"/>
                         <p:menuitem rendered="#{plantillaController.cliente.compraCol != null}" value="Lista Compras" outcome="/protegido/ListaCompras?faces-redirect=true"  update="messages" icon="pi pi-chart-bar"/>
-                        <p:menuitem value="Reporte" outcome="/protegido/report?faces-redirect=true" update="messages" icon="pi pi-map-marker"/>
                         <p:menuitem value="Usuarios" update="messages" icon="pi pi-users"/>
                         <p:menuitem value="Mensajes" update="messages" icon="pi pi-comments"/>
                         <p:menuitem value="Publicar" update="messages" icon="pi pi-pencil"/>

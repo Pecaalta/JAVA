@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+
+        <ui:composition template="./WEB-INF/templates/plantilla.xhtml">
+
+            <ui:define name="content">
+                <p:growl id="mensaje" severity="info, fatal" showSummary="false" showDetail="true"/>
+                <style>
+                    .ui-panelgrid .ui-grid-responsive {
+
+                        box-shadow: 0 1px 0 rgba(12,13,14,0.1), 0 1px 6px rgba(59,64,69,0.1);
+                        width: 1000px;
+                        max-width: 100%;
+                        margin: auto;
+                        padding: 20px;
+                    }
+                    h2 {
+                        text-align: center;
+                        font-size: 35px;
+                        color: #333;
+                    }
+                </style>
+                <h:form>
+                        <h2>Pagar producto</h2>
+                    <p:panelGrid class="box" id="pgRegistros" columns="3" layout="grid" >
+                    
+                        <p:outputLabel for="txtTarjeta" value="Tarjeta" />
+                        <p:inputText id="txtTarjeta" value="#{StoreController.pago.tarjeta}" required="true"/>    
+                        <p:message for="txtTarjeta"/>  
+
+                        <p:outputLabel for="txtNumero" value="Numero" />
+                        <p:inputText id="txtNumero" value="#{StoreController.pago.numero}" required="true"/>    
+                        <p:message for="txtNumero"/>  
+
+                        <p:outputLabel for="txtExpira" value="Venciminto" />
+                        <p:inputText id="txtExpira" value="#{StoreController.pago.expira}" required="true"/>    
+                        <p:message for="txtExpira"/>  
+
+                        <p:outputLabel for="txtCvv" value="CVV" />
+                        <p:inputText id="txtCvv" value="#{StoreController.pago.cvv}" required="true"/>    
+                        <p:message for="txtCvv"/>  
+                        <p:commandButton icon="ui-icon-check" value="Registro" update="pgRegistros, mensaje" actionListener="#{StoreController.comprar()}"/>
+   
+                    </p:panelGrid>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

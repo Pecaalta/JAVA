@@ -23,6 +23,10 @@
                         <p:column headerText="Precio">
                             <h:outputText value="#{car.productoidCompra.precio}" />
                         </p:column>
+                        <p:column headerText="Estado">
+                            <h:outputText rendered="#{car.pago == null}" value="No Pagado" />                            
+                            <h:outputText rendered="#{car.pago != null}" value="Pagado" />
+                        </p:column>
                         <p:column styleClass="w-100px" headerText="Acciones">
                             <h:commandButton styleClass="ui-priority-primary" value="Calificar" />
                         </p:column>

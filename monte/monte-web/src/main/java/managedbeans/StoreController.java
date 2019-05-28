@@ -5,12 +5,13 @@
  */
 package managedbeans;
 
-import EJB.CompraFacadeLocal;
+import EJB.PagoFacadeLocal;
 import EJB.ClienteFacadeLocal;
 import EJB.TiendaFacadeLocal;
 import EJB.ProductoFacadeLocal;
 import entities.Cliente;
 import entities.Compra;
+import entities.Pago;
 import entities.Producto;
 import entities.Tienda;
 import java.io.IOException;
@@ -53,6 +54,10 @@ public class StoreController implements Serializable {
     
     private Producto producto;
     private Tienda tienda;
+    private Pago pago;
+    private Compra compra;
+    private Cliente cliente;
+    
     private List<Producto> productCol;
     private List<Compra> compraCol;
     @EJB
@@ -62,7 +67,7 @@ public class StoreController implements Serializable {
     @EJB
     private ClienteFacadeLocal ClienteEJB;
     @EJB
-    private CompraFacadeLocal CompraEJB;
+    private PagoFacadeLocal PagoEJB;
      
     public BarChartModel bar() {
         return barModel;
@@ -71,8 +76,9 @@ public class StoreController implements Serializable {
     @PostConstruct
     public void init() {
         productCol = new ArrayList<Producto>();
-        productCol = new ArrayList<Producto>();
+        compra = new Compra();
         producto = new Producto();
+        pago = new Pago();
         SeriesBarChart = new ArrayList(); 
         ChartSeriesData data = new ChartSeriesData();
         data.setTitle("Datos 1");
@@ -84,6 +90,14 @@ public class StoreController implements Serializable {
         data.setData(lista);
         SeriesBarChart.add(data);
         createBarModels();
+    }
+
+    public Pago getPago() {
+        return pago;
+    }
+
+    public void setPago(Pago pago) {
+        this.pago = pago;
     }
  
     private void createBarModels() {
@@ -161,27 +175,35 @@ public class StoreController implements Serializable {
     }
     public void cargarCompras() {
         FacesContext context = FacesContext.getCurrentInstance();
-        Cliente c = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
-        compraCol = new ArrayList<Compra>(c.getCompraCol());
+        cliente = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+        compraCol = new ArrayList<Compra>(cliente.getCompraCol());
     }
     
-    public void comprar() {
+    public void pagar() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
-        Cliente c = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
-        if (c != null) {
-            Collection<Compra> co = c.getCompraCol();
-            Compra compra = new Compra();
+        cliente = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+        if (cliente != null) {
+            context.getExternalContext().getSessionMap().put("producto", producto);
+            context.getExternalContext().redirect("pagar.xhtml?faces-redirect=true");
+        }else {
+            context.getExternalContext().redirect("login.xhtml?faces-redirect=true");
+        }
+    }
+    public void comprar() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        cliente = (Cliente) context.getExternalContext().getSessionMap().get("usuario");
+        producto = (Producto) context.getExternalContext().getSessionMap().get("producto");
+        if (cliente != null) {
+            Collection<Compra> co = cliente.getCompraCol();
             compra.setProductoidCompra(producto);
-            compra.setUseridCompra(c);
+            compra.setUseridCompra(cliente);
+            compra.setPago(pago);
             co.add(compra);
-            c.setCompraCol(co);
-            ClienteEJB.edit(c);
+            cliente.setCompraCol(co);
+            ClienteEJB.edit(cliente);
+            context.getExternalContext().redirect("protegido/ListaCompras.xhtml?faces-redirect=true");
         } else {
-            try {
-                context.getExternalContext().redirect("/login?faces-redirect=true");
-            } catch (IOException ex) {
-                Logger.getLogger(StoreController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            context.getExternalContext().redirect("login.xhtml?faces-redirect=true");
         }
     }
 

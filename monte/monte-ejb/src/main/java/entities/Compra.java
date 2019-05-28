@@ -6,13 +6,16 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.TableGenerator;
 
 /**
@@ -41,6 +44,9 @@ public class Compra implements Serializable {
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Producto productoidCompra;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private Pago pago;
+    
     public Compra() {
     }
 
@@ -52,6 +58,14 @@ public class Compra implements Serializable {
         this.id = id;
         this.comentario = comentario;
         this.calificacion = calificacion;
+    }
+
+    public Pago getPago() {
+        return pago;
+    }
+
+    public void setPago(Pago pago) {
+        this.pago = pago;
     }
 
     public Long getId() {

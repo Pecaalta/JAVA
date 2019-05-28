@@ -8,6 +8,7 @@ package managedbeans;
 import EJB.ClienteFacadeLocal;
 import EJB.TiendaFacadeLocal;
 import entities.Cliente;
+import entities.Pago;
 import entities.Tienda;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -33,7 +34,8 @@ public class UsuarioController implements Serializable {
     private TiendaFacadeLocal tiendaEJB;
     
     private Cliente cliente;
-    private Tienda tienda;
+    private Tienda tienda;    
+
     
     @PostConstruct
     public void init() {
@@ -64,7 +66,7 @@ public class UsuarioController implements Serializable {
             cl = clienteEJB.iniciarSesion(cliente);
             if(cl != null){
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", cl);
-                redireccion = "/protegido/principal?faces-redirect=true";
+                redireccion = "/protegido/CantidadProductos?faces-redirect=true";
             }
             else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso","Cagamos dijo ramos"));

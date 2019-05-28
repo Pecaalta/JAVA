@@ -21,35 +21,25 @@
         <h:form>
             <p:growl showDetail="true"/>
             <h:panelGrid columns="2">
-            <p:outputLabel for="txtEmail" value="Email"/>
-            <p:inputText id="txtEmail" value="#{UsuarioController.cliente.email}" autocomplete="off" required="true" widgetVar="textoEmail" />
-            
-            <p:outputLabel for="txtPassword" value="Password"/>
-            
-            <p:password id="txtPassword" value="#{UsuarioController.cliente.password}" promptLabel="Ingrese una clave" required="true">
-                <f:validateLength minimum = "5" maximum = "8" />
-            </p:password>
-            
-            <h:column />
-            <p:commandButton icon="ui-icon-key" value="Iniciar sesion" styleClass="ui-priority-primary"  action="#{UsuarioController.iniciarSesion()}"/>
-           
-            
+                <p:outputLabel for="txtEmail" value="Email"/>
+                <p:inputText id="txtEmail" value="#{UsuarioController.cliente.email}" autocomplete="off" required="true" widgetVar="textoEmail" />     
+                
+                <p:outputLabel for="txtPassword" value="Password"/>
+                <p:password id="txtPassword" value="#{UsuarioController.cliente.password}" promptLabel="Ingrese una clave" required="true">
+                    <f:validateLength minimum = "5" maximum = "8" />
+                </p:password>
+                <h:column />
+                <p:commandButton icon="ui-icon-key" value="Iniciar sesion" styleClass="ui-priority-primary"  action="#{UsuarioController.iniciarSesion()}"/>
             </h:panelGrid>
-            
-            
             <p:link value="Crea una cuenta" outcome="registro" />
             <p:link value="Registrarta tu tienda" outcome="registroTienda" />
-            
         </h:form>
         <p:separator />
         <h:form id="goid">
             <div class="g-signin2" data-onsuccess="onSignIn"></div>
             <p:inputText style="display: none" widgetVar="wve" value="#{UsuarioController.cliente.email}" />
             <h:commandButton style="display: none" id="clickButton" action="#{UsuarioController.iniciarSesionGoogle()}"/>
-            
-            
         </h:form>
-        
         <script>
             function onSignIn(googleUser) {
                 var profile = googleUser.getBasicProfile();
