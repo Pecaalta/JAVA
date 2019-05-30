@@ -75,6 +75,7 @@ public class StoreController implements Serializable {
     
     @PostConstruct
     public void init() {
+        tienda = new Tienda();
         productCol = new ArrayList<Producto>();
         compra = new Compra();
         producto = new Producto();
@@ -170,6 +171,9 @@ public class StoreController implements Serializable {
         productCol = new ArrayList<Producto>(tienda.getProductCol());
     }
     
+    public void cargartienda() {
+        tienda = TiendaEJB.find(tienda.getId());
+    }
     public void cargarproducto() {
         producto = ProductoEJB.find(producto.getId());
     }

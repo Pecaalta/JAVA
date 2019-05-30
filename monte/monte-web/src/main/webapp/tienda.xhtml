@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <head>
+        <f:metadata>
+            <f:viewParam name="Tienda" value="#{StoreController.tienda.id}"/>
+        </f:metadata>
+        <title>Tienda </title>
+    </head>
+    <body>
+
+        <ui:composition template="./WEB-INF/templates/plantilla.xhtml">
+
+            <ui:define name="content">
+                <f:event type="preRenderView" listener="#{StoreController.cargartienda()}"/>
+                <h2 rendered="#{StoreController.tienda == null}" >No se encontro la tienda</h2>
+                <div>
+                    <h:outputText styleClass="titulo" value="#{StoreController.tienda.nombre}" /> 
+                    <h:outputText styleClass="titulo" value="#{StoreController.tienda.id}" />
+                </div>
+                <div>
+                    <h:outputText styleClass="span" value="PackegedTime: #{StoreController.tienda.packegedTime}" /> 
+                    <h:outputText styleClass="span" value="Creador: #{StoreController.tienda.creadorUserId}" />
+                    <h:outputText styleClass="span" value="Ubicacion:#{StoreController.tienda.ubicacionidTienda}" />
+                    
+                </div>
+
+
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>
